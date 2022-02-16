@@ -11,21 +11,22 @@ class Marker(Enum):
 
 class GameMaster:
     
-    def __init__(self, answer, candidates):
+    def __init__(self, answer, candidates, quiet=False):
         self.answer = answer
         self.counter = 0
-        self.gameset = False
+        self.game_win = False
         self.word_size = 5
         self.guesses= []
         self.hints = []
         self.word_candidates = candidates
+        self.quiet = quiet
                 
-    def is_gameset(self, hint):
-        gameset = all([int(h) == Marker.GREEN.value for h in hint])
-        self.gameset = gameset
-        if self.gameset:
-            print("=== GameSet ===")
-        return self.gameset
+    def is_game_win(self, hint):
+        game_win = all([int(h) == Marker.GREEN.value for h in hint])
+        self.game_win = game_win
+        if self.game_win and not self.quiet:
+            print("=== Win ===")
+        return self.game_win
 
     def _is_valid_input(self, input):
         if len(input) != self.word_size:
@@ -53,7 +54,7 @@ class GameMaster:
         self.hints.append(hint)
         self.counter += 1
         
-        self.is_gameset(hint)
+        self.is_game_win(hint)
 
         return hint
 
